@@ -1,0 +1,206 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+h8 
+    text-align: left
+    font-size: 20px
+}
+
+body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif
+    background-color: #f0f0f0;
+}
+.navbar {
+    background-color: #003366;
+    overflow: hidden;
+    border-radius: 0 0 10px 10px;
+}
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+.sidebar {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #003366;
+    padding-top: 20px;
+    border-radius: 0 10px 10px 0;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+.sidebar ul li {
+    padding: 8px;
+    text-align: center;
+}
+.sidebar ul li a, .sidebar ul li button {
+    color: white;
+    text-decoration: none;
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.sidebar ul li a:hover, .sidebar ul li button:hover {
+    background-color: #575757;
+}
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+}
+.box-model {
+    border: 2px solid #003366;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #003366;
+}
+a {
+    color: #cc0000;
+}
+#contactInfo {
+    display: none;
+    background-color: #ffffff;
+    border: 2px solid #003366;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+#contactButton {
+    background-color: #cc0000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+#contactButton:hover {
+    background-color: #990000;
+}
+</style>
+
+
+h1{
+    color: royalblue !important;
+}
+body{
+    background-color: beige;
+    font-family: Arial, Helvetica, sans-serif;
+
+/* Global Body Background */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: -moz-repeating-radial-gradient(flag); /* Your American flag image */
+    background-size: cover; /* Makes sure the image covers the entire screen */
+    background-position: center; /* Center the image */
+    background-attachment: fixed; /* Keep the background fixed while scrolling */
+    color: white; /* Text color to contrast with the background */
+}
+
+/* Header Styling */
+header {
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for header */
+    padding: 20px;
+}
+
+/* Navigation Menu */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Sections */
+section {
+    padding: 60px 20px;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for sections */
+    margin: 20px 0;
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: left
+    font-size: 36px;
+}
+h2, h3 {
+    text-align: left;
+    font-size: 28px;
+}
+h8 {
+    text-align: left
+    font-size: 20px
+}
+/* Form Styling */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+form label {
+    color: white;
+    font-size: 16px;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form button {
+    background-color: #b22234; /* Dark red button color */
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #a11e2c; /* Slightly darker red on hover */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+
+}

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird with Coins and Obstacles</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background: #70c5ce;
+        }
+        #gameOver, #instructions {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: red;
+            text-align: center;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+        }
+        #restartButton, #startButton {
+            display: none;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            padding: 10px 20px;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOver">Game Over</div>
+    <div id="instructions">
+        <p>Welcome to Flappy Bird with Coins!</p>
+        <p>Press any key to make the bird fly.</p>
+        <p>Avoid the green tubes and collect coins.</p>
+        <p>Click the button below to start the game.</p>
+    </div>
+    <div id="score">Coins: 0</div>
+    <button id="restartButton">Click to Restart</button>
+    <button id="startButton">Click to Start</button>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let bird = {
+            x: 50,
+            y: 150,
+            width: 20,
+            height: 20,
+            gravity: 0.6,
+            lift: -15,
+            velocity: 0,
+            speed: 2
+        };
+
+        let coins = [];
+        let obstacles = [];
+        let score = 0;
+        let gameOver = false;
+        let frames = 0;
+        let gameStarted = false;
+
+        function drawBird() {
+            ctx.fillStyle = 'yellow';
+            ctx.beginPath();
+            ctx.arc(bird.x + bird.width / 2, bird.y + bird.height / 2, bird.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawCoins() {
+            ctx.fillStyle = 'gold';
+            coins.forEach(coin => {
+                ctx.beginPath();
+                ctx.arc(coin.x, coin.y, 20, 0, Math.PI * 2); // Increased radius to 20
+                ctx.fill();
+                // Add sparkle effect
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(coin.x - 10, coin.y);
+                ctx.lineTo(coin.x + 10, coin.y);
+                ctx.moveTo(coin.x, coin.y - 10);
+                ctx.lineTo(coin.x, coin.y + 10);
+                ctx.stroke();
+            });
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = 'green';
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, 0, obstacle.width, obstacle.top);
+                ctx.fillRect(obstacle.x, canvas.height - obstacle.bottom, obstacle.width, obstacle.bottom);
+            });
+        }
+
+        function updateBird() {
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+            if (bird.y + bird.height > canvas.height) {
+                bird.y = canvas.height - bird.height;
+                bird.velocity = 0;
+                endGame();
+            }
+        }
+
+        function updateCoins() {
+            coins.forEach(coin => {
+                coin.x -= bird.speed;
+            });
+            coins = coins.filter(coin => coin.x > 0);
+        }
+
+        function updateObstacles() {
+            obstacles.forEach(obstacle => {
+                obstacle.x -= bird.speed;
+            });
+            obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > 0);
+        }
+
+        function checkCollision() {
+            coins.forEach((coin, index) => {
+                if (bird.x < coin.x + 20 && bird.x + bird.width > coin.x &&
+                    bird.y < coin.y + 20 && bird.y + bird.height > coin.y) {
+                    coins.splice(index, 1);
+                    score++;
+                    document.getElementById('score').innerText = `Coins: ${score}`;
+                }
+            });
+
+            obstacles.forEach(obstacle => {
+                if (bird.x < obstacle.x + obstacle.width && bird.x + bird.width > obstacle.x &&
+                    (bird.y < obstacle.top || bird.y + bird.height > canvas.height - obstacle.bottom)) {
+                    endGame();
+                }
+            });
+        }
+
+        function addCoin(obstacle) {
+            let coin = {
+                x: obstacle.x + obstacle.width + 50,
+                y: obstacle.top + (canvas.height - obstacle.top - obstacle.bottom) / 2
+            };
+            coins.push(coin);
+        }
+
+        function addObstacle() {
+            let gap = 300; // Increased gap size
+            let top = Math.random() * (canvas.height - gap);
+            let bottom = canvas.height - top - gap;
+            let obstacle = {
+                x: canvas.width,
+                width: 30,
+                top: top,
+                bottom: bottom
+            };
+            obstacles.push(obstacle);
+            addCoin(obstacle);
+            console.log('Obstacle added:', obstacle);
+        }
+
+        function endGame() {
+            gameOver = true;
+            document.getElementById('gameOver').style.display = 'block';
+            document.getElementById('restartButton').style.display = 'block';
+        }
+
+        function restartGame() {
+            bird.y = 150;
+            bird.velocity = 0;
+            bird.speed = 2;
+            coins = [];
+            obstacles = [];
+            score = 0;
+            frames = 0;
+            gameOver = false;
+            document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('restartButton').style.display = 'none';
+            document.getElementById('score').innerText = `Coins: ${score}`;
+            gameLoop();
+        }
+
+        function startGame() {
+            gameStarted = true;
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('startButton').style.display = 'none';
+            gameLoop();
+        }
+
+        function gameLoop() {
+            if (gameOver || !gameStarted) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBird();
+            drawCoins();
+            drawObstacles();
+            updateBird();
+            updateCoins();
+            updateObstacles();
+            checkCollision();
+            frames++;
+            if (frames % 1000 === 0) {
+                bird.speed += 0.5;
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        document.addEventListener('keydown', () => {
+            if (!gameOver && gameStarted) {
+                bird.velocity = bird.lift;
+            }
+        });
+
+        document.getElementById('restartButton').addEventListener('click', restartGame);
+        document.getElementById('startButton').addEventListener('click', startGame);
+
+        document.getElementById('instructions').style.display = 'block';
+        document.getElementById('startButton').style.display = 'block';
+
+        setInterval(addObstacle, 4000);
+    </script>
+</body>
+</html>
